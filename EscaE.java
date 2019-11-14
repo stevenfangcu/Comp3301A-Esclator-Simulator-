@@ -9,12 +9,12 @@ public class EscaE{
   This code is used for C).
   */
   public static double mixedEsc(int standers ,int nonStanders) throws IndexOutOfBoundsException{
+    System.out.println(standers + " " + nonStanders);
     Queue<Double> left = new LinkedList<>();
     Queue<Double> right = new LinkedList<>();
     int stepsLeft, stepsRight = 0; //steps available to take
     double infrontPersonLeft,infrontPersonRight, secondsLeft,secondsRight;
     infrontPersonLeft = infrontPersonRight = secondsLeft = secondsRight = 0.0;
-    System.out.println(standers + " " + nonStanders);
     double seconds = 0.0;
     int counter = 0;
     int standingCounter = 0;
@@ -27,17 +27,18 @@ public class EscaE{
     while(true){
       int randomGen = (int)(Math.random() * 10)%2; // first person, walker = 0, stander = 1
       int randomGen2 = (int)(Math.random() * 10)%2; // second person ''
-
-      if(standingCounter == standers && nonStanders <= nonStandingCounter){ //all standers have went
+      if(nonStanders == nonStandingCounter &&  standers >= standingCounter+2){ //all walkers have went
+        nonStanders++;
+        standers--;
+        randomGen = 1;
+        randomGen2 = 0;
+      }else if(standingCounter == standers && nonStanders <= nonStandingCounter){
         randomGen = 0;
         randomGen2 = 2;
-      }else if(nonStanders == nonStandingCounter &&  standers <= standingCounter){ //all walkers have went
+      }else if(nonStanders == nonStandingCounter &&  standers <= standingCounter){
         randomGen = 1;
         randomGen2 = 2;
       }
-
-      //System.out.println(nonStandingCounter + " " + standingCounter);
-      //System.out.println(nonStanders + " " + standers);
       if(randomGen == 1 && randomGen2 == randomGen && standingCounter < standers){ // both standing
         System.out.println(randomGen + "-" + randomGen2);
         left.add(1.0);
@@ -81,8 +82,13 @@ code below is calculating the time it takes
 
       if(left.size() == height || (standingCounter == standers && left.size() > 0)){ //left side is full
         double head = left.remove();
-        int secondsDiff = stepsAvailableRightList.get(0);
-        stepsAvailableRightList.remove(0);
+        int secondsDiff = 0;
+        if(stepsAvailableRightList.isEmpty()){
+          secondsDiff = 0;
+        }else{
+          secondsDiff = stepsAvailableRightList.get(0);
+          stepsAvailableRightList.remove(0);
+        }
         if(secondsLeft == 0.0){ // first person off is on left side, base timer
           secondsLeft += height+(secondsDiff);
           secondsRight += height+(secondsDiff);
@@ -95,11 +101,17 @@ code below is calculating the time it takes
 
       if(right.size() == height || (nonStandingCounter == nonStanders && right.size() > 0)){ //right side is full
         double head = right.remove();
-        int stepsAvailable = stepsAvailableLeftList.get(0); // person's speed getting off
-        stepsAvailableLeftList.remove(0);
+        int stepsAvailable = 0;
+        if(stepsAvailableLeftList.isEmpty()){
+          stepsAvailable = 0;
+        }else{
+          stepsAvailable = stepsAvailableLeftList.get(0); // person's speed getting off
+          stepsAvailableLeftList.remove(0);
+        }
         int heightSub = height - stepsAvailable;
         if(secondsRight == 0.0){ //first person off is on the right side, base timer
           secondsRight += (head*height);
+          secondsLeft += (head*height);
           System.out.println("init left: " + secondsRight);
           infrontPersonRight = head; //keep track of the last person that got off.
         }else if(head < infrontPersonRight){ // your steps per second is lower (therefore faster)
@@ -123,9 +135,14 @@ code below is calculating the time it takes
           break;
         }
       }
+
     }
     System.out.println(secondsLeft + " " + secondsRight);
+    if(secondsLeft > secondsRight){
       return secondsLeft;
+    }else{
+      return secondsRight;
+    }
   }
 
   public static void main(String[] args) throws IOException{
@@ -134,8 +151,8 @@ code below is calculating the time it takes
     for(int i = 0; i < 1; i++){
       //int standers = (int)(Math.random() * 99 + 1);
       //int nonStanders = 100 - standers;
-      int standers = 10;
-      int nonStanders = 10;
+      int standers = 5;
+      int nonStanders = 5;
       double returnV = mixedEsc(standers,nonStanders);
       writer.println("value: " + returnV);
       writer.println(standers + " " + nonStanders);
