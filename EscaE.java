@@ -49,9 +49,12 @@ public class EscaE{
         System.out.println(randomGen + "-" + randomGen2);
         left.add(1.0);
         standingCounter++;
-        int valueStatement = stepsAvailableRightList.get(stepsAvailableRightList.size()-1);
-        valueStatement += 1;
-        stepsAvailableRightList.set(stepsAvailableRightList.size()-1,valueStatement);
+        int valueStatement = 0;
+        if(!(stepsAvailableRightList.isEmpty())){
+          valueStatement = stepsAvailableRightList.get(stepsAvailableRightList.size()-1);
+          valueStatement += 1;
+          stepsAvailableRightList.set(stepsAvailableRightList.size()-1,valueStatement);
+        }
         stepsAvailableLeftList.add(0);
       }else if(randomGen == 0 && randomGen2 == randomGen && nonStandingCounter < nonStanders){ // both walking
         System.out.println(randomGen + "-" + randomGen2);
@@ -164,8 +167,8 @@ code below is calculating the time it takes
     int i = 0;
     PrintWriter writer = new PrintWriter("E).txt", "UTF-8");
     for(i = 0; i < 20; i++){
-      int standers = (int)(Math.random() * 10 + 1);
-      int nonStanders = 10 - standers;
+      int standers = (int)(Math.random() * 99 + 1);
+      int nonStanders = 100 - standers;
       //int standers = 5;
       //int nonStanders = 5;
       double returnV = mixedEsc(standers,nonStanders);
