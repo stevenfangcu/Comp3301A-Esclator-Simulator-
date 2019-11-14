@@ -10,6 +10,7 @@ public class EscaE{
   */
   public static double mixedEsc(int standers ,int nonStanders) throws IndexOutOfBoundsException{
     System.out.println(standers + " " + nonStanders);
+    int total = standers+nonStanders;
     Queue<Double> left = new LinkedList<>();
     Queue<Double> right = new LinkedList<>();
     int stepsLeft, stepsRight = 0; //steps available to take
@@ -27,7 +28,12 @@ public class EscaE{
     while(true){
       int randomGen = (int)(Math.random() * 10)%2; // first person, walker = 0, stander = 1
       int randomGen2 = (int)(Math.random() * 10)%2; // second person ''
-      if(nonStanders == nonStandingCounter &&  standers >= standingCounter+2){ //all walkers have went
+      if((nonStandingCounter+standingCounter) == total){
+        randomGen = 3;
+        randomGen2 = 3;
+        nonStanders = nonStandingCounter;
+        standers = standingCounter;
+      }else if(nonStanders == nonStandingCounter &&  standers >= standingCounter+2){ //all walkers have went
         nonStanders++;
         standers--;
         randomGen = 1;
@@ -51,9 +57,14 @@ public class EscaE{
         System.out.println(randomGen + "-" + randomGen2);
         right.add((double)((Math.random() * 35 + 40)/100));
         nonStandingCounter++;
-        int valueStatement = stepsAvailableLeftList.get(stepsAvailableLeftList.size()-1);
-        valueStatement += 1;
-        stepsAvailableLeftList.set(stepsAvailableLeftList.size()-1,valueStatement);
+        int valueStatement = 0;
+        if(stepsAvailableLeftList.isEmpty()){
+
+        }else{
+          valueStatement = stepsAvailableLeftList.get(stepsAvailableLeftList.size()-1);
+          valueStatement += 1;
+          stepsAvailableLeftList.set(stepsAvailableLeftList.size()-1,valueStatement);
+        }
         stepsAvailableRightList.add(0);
       }else if((randomGen == 0 && randomGen2 == 1) || (randomGen == 1 && randomGen2 == 0)){ // both can get on
         System.out.println(randomGen + "-" + randomGen2);
@@ -74,7 +85,10 @@ public class EscaE{
         stepsAvailableRightList.add(0);
         nonStandingCounter++;
       }
+      System.out.println(randomGen + "-" + randomGen2);
       System.out.println(stepsAvailableLeftList + " " + stepsAvailableRightList);
+      System.out.println(standers + " " + nonStanders);
+      System.out.println("1: " + standingCounter + " " + nonStandingCounter);
 /*
 the above is the code to keep track of steps taken and adding people to the queue
 code below is calculating the time it takes
@@ -147,20 +161,21 @@ code below is calculating the time it takes
 
   public static void main(String[] args) throws IOException{
     double average = 0.0;
+    int i = 0;
     PrintWriter writer = new PrintWriter("E).txt", "UTF-8");
-    for(int i = 0; i < 1; i++){
-      //int standers = (int)(Math.random() * 99 + 1);
-      //int nonStanders = 100 - standers;
-      int standers = 5;
-      int nonStanders = 5;
+    for(i = 0; i < 20; i++){
+      int standers = (int)(Math.random() * 10 + 1);
+      int nonStanders = 10 - standers;
+      //int standers = 5;
+      //int nonStanders = 5;
       double returnV = mixedEsc(standers,nonStanders);
       writer.println("value: " + returnV);
       writer.println(standers + " " + nonStanders);
       writer.println();
       average += returnV;
     }
-    writer.println("Average: " + (average));
+    writer.println("Average: " + (average/i));
     writer.close();
-    System.out.println("Average: " + average);
+    System.out.println("Average: " + average/i);
   }
 }
