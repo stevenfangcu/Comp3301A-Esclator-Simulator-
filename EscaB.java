@@ -28,7 +28,7 @@ public class EscaB{
           standingCounter++;
           counter++;
         }else if (nonStandersCounter < nonStanders){
-          left.add((double)((Math.random() * 60 + 40)/total));
+          left.add((double)((Math.random() * 35 + 40)/100));
           nonStandersCounter++;
           counter++;
           //left.add(1.0);
@@ -41,48 +41,50 @@ public class EscaB{
           counter++;
           standingCounter++;
         }else if(nonStandersCounter < nonStanders){
-          right.add((double)((Math.random() * 60 + 40)/total));
+          right.add((double)((Math.random() * 35 + 40)/100));
           nonStandersCounter++;
           counter++;
           //right.add(1.0);
         }
       }
 
-      if(left.size() == 20 || (counter == total && left.size() > 0)){
+      if(left.size() == height || (counter == total && left.size() > 0)){
         /*
         head is the person that is getting off, infrontPersonLeft is the person that got off
         before the head.
         */
         double head = left.remove();
         if(secondsLeft == 0.0){ // first person on left side
-          secondsLeft += (head*20);
+          secondsLeft += (head*height);
           infrontPersonLeft = head;
         }else if(head > infrontPersonLeft){ //youre slower than the person infront of you
           //System.out.println("Left: " + ((head - infrontPersonLeft)*10));
-          secondsLeft += ((head - infrontPersonLeft));
+          double valu = (infrontPersonLeft*height) - (head*height);
+          secondsLeft += (valu/height);
           infrontPersonLeft = head;
         }else{ // if faster than person ahead of you
           //System.out.println("Left: " + infrontPersonLeft);
-          secondsLeft += infrontPersonLeft;
+          secondsLeft += head;
           infrontPersonLeft = head;
         }
       }
-      if(right.size() == 20 || (counter == total && right.size() > 0)){
+      if(right.size() == height || (counter == total && right.size() > 0)){
         /*
         head is the person that is getting off, infrontPersonRight is the person that got off
         before the head.
         */
         double head = right.remove();
         if(secondsRight == 0.0){ // first person on right side
-          secondsRight += (head*20);
+          secondsRight += (head*height);
           infrontPersonRight = head;
-        }else if(head > infrontPersonRight){ //youre slower than the person infront of you
+        }else if(head < infrontPersonRight){ //youre faster than the person infront of you
           //System.out.println("Right: " + ((head - infrontPersonRight)*20));
-          secondsRight += ((head - infrontPersonRight));
+          double valu = (infrontPersonRight*height) - (head*height);
+          secondsRight += (valu/height);
           infrontPersonRight = head;
-        }else{ // if faster than person ahead of you
+        }else{ // if slower than person ahead of you
           //System.out.println("Right: " + infrontPersonRight);
-          secondsRight += infrontPersonRight;
+          secondsRight += head;
           infrontPersonRight = head;
         }
       }
